@@ -71,7 +71,7 @@ Fuse AddMM Branches
     `Torch-TensorRT/core/lowering/passes/fuse_addmm_branches.cpp <https://github.com/pytorch/TensorRT/blob/master/core/lowering/passes/fuse_addmm_branches.cpp>`_
 
 A common pattern in scripted modules is tensors of different dimensions use different constructions for implementing linear layers. We fuse these
-different varients into a single one that will get caught by the Unpack AddMM pass.
+different variants into a single one that will get caught by the Unpack AddMM pass.
 
 .. code-block:: none
 
