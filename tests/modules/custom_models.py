@@ -6,7 +6,6 @@ import torch.nn.functional as F
 
 # Sample Pool Model (for testing plugin serialization)
 class Pool(nn.Module):
-
     def __init__(self):
         super(Pool, self).__init__()
 
@@ -16,7 +15,6 @@ class Pool(nn.Module):
 
 # Sample Nested Module (for module-level fallback testing)
 class ModuleFallbackSub(nn.Module):
-
     def __init__(self):
         super(ModuleFallbackSub, self).__init__()
         self.conv = nn.Conv2d(1, 3, 3)
@@ -27,7 +25,6 @@ class ModuleFallbackSub(nn.Module):
 
 
 class ModuleFallbackMain(nn.Module):
-
     def __init__(self):
         super(ModuleFallbackMain, self).__init__()
         self.layer1 = ModuleFallbackSub()
@@ -40,7 +37,6 @@ class ModuleFallbackMain(nn.Module):
 
 # Sample Looping Modules (for loop fallback testing)
 class LoopFallbackEval(nn.Module):
-
     def __init__(self):
         super(LoopFallbackEval, self).__init__()
 
@@ -52,7 +48,6 @@ class LoopFallbackEval(nn.Module):
 
 
 class LoopFallbackNoEval(nn.Module):
-
     def __init__(self):
         super(LoopFallbackNoEval, self).__init__()
 
@@ -64,7 +59,6 @@ class LoopFallbackNoEval(nn.Module):
 
 # Sample Conditional Model (for testing partitioning and fallback in conditionals)
 class FallbackIf(torch.nn.Module):
-
     def __init__(self):
         super(FallbackIf, self).__init__()
         self.relu1 = torch.nn.ReLU()
@@ -89,7 +83,6 @@ class FallbackIf(torch.nn.Module):
 
 # Sample Inplace OP in Conditional Block Model
 class FallbackInplaceOPIf(nn.Module):
-
     def __init__(self):
         super(FallbackInplaceOPIf, self).__init__()
 

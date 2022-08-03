@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_import", "cc_library")
+
 package(default_visibility = ["//visibility:public"])
 
 config_setting(
@@ -276,32 +278,41 @@ cc_library(
 
 cc_library(
     name = "nvcaffeparser",
+    visibility = ["//visibility:public"],
     deps = [
         "nvcaffeparser_headers",
         "nvcaffeparser_lib",
         "nvinfer",
     ],
-    visibility = ["//visibility:public"],
 )
 
 ####################################################################################
 
 cc_library(
     name = "nvinferplugin",
-    hdrs = select({
-        ":aarch64_linux": glob(["include/aarch64-linux-gnu/NvInferPlugin*.h"]),
-        ":windows": glob(["include/NvInferPlugin*.h"]),
-        "//conditions:default": glob(["include/x86_64-linux-gnu/NvInferPlugin*.h"]),
-    }),
     srcs = select({
         ":aarch64_linux": ["lib/aarch64-linux-gnu/libnvinfer_plugin.so"],
         ":windows": ["lib/nvinfer_plugin.dll"],
         "//conditions:default": ["lib/x86_64-linux-gnu/libnvinfer_plugin.so"],
     }),
+    hdrs = select({
+        ":aarch64_linux": glob(["include/aarch64-linux-gnu/NvInferPlugin*.h"]),
+        ":windows": glob(["include/NvInferPlugin*.h"]),
+        "//conditions:default": glob(["include/x86_64-linux-gnu/NvInferPlugin*.h"]),
+    }),
+    copts = [
+        "-pthread",
+    ],
     includes = select({
         ":aarch64_linux": ["include/aarch64-linux-gnu/"],
         ":windows": ["include/"],
         "//conditions:default": ["include/x86_64-linux-gnu/"],
+    }),
+    linkopts = [
+        "-lpthread",
+    ] + select({
+        ":aarch64_linux": ["-Wl,--no-as-needed -ldl -lrt -Wl,--as-needed"],
+        "//conditions:default": [],
     }),
     deps = [
         "nvinfer",
@@ -312,13 +323,4 @@ cc_library(
         "//conditions:default": ["@cuda//:cublas"],
     }),
     alwayslink = True,
-    copts = [
-        "-pthread"
-    ],
-    linkopts = [
-        "-lpthread",
-    ] + select({
-        ":aarch64_linux": ["-Wl,--no-as-needed -ldl -lrt -Wl,--as-needed"],
-        "//conditions:default": []
-    })
 )

@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
 package(default_visibility = ["//visibility:public"])
 
 config_setting(
@@ -7,32 +9,31 @@ config_setting(
     },
 )
 
-
 test_suite(
     name = "api_tests",
     tests = [
-        ":test_default_input_types",
         ":test_compiled_modules",
-        ":test_modules_as_engines",
-        ":test_runtime_thread_safety",
-        ":test_multiple_registered_engines",
-        ":test_serialization",
+        ":test_default_input_types",
+        ":test_example_tensors",
         ":test_module_fallback",
-        ":test_example_tensors"
+        ":test_modules_as_engines",
+        ":test_multiple_registered_engines",
+        ":test_runtime_thread_safety",
+        ":test_serialization",
     ],
 )
 
 test_suite(
     name = "aarch64_api_tests",
     tests = [
-        ":test_default_input_types",
         ":test_compiled_modules",
-        ":test_modules_as_engines",
-        ":test_runtime_thread_safety",
-        ":test_multiple_registered_engines",
-        ":test_serialization",
+        ":test_default_input_types",
+        ":test_example_tensors",
         ":test_module_fallback",
-        ":test_example_tensors"
+        ":test_modules_as_engines",
+        ":test_multiple_registered_engines",
+        ":test_runtime_thread_safety",
+        ":test_serialization",
     ],
 )
 
@@ -81,11 +82,12 @@ cc_test(
     ] + select({
         ":use_pre_cxx11_abi": ["@libtorch_pre_cxx11_abi//:libtorch"],
         "//conditions:default": ["@libtorch//:libtorch"],
-    })
+    }),
 )
 
 cc_test(
     name = "test_modules_as_engines",
+    timeout = "long",
     srcs = ["test_modules_as_engines.cpp"],
     data = [
         "//tests/modules:jit_models",
@@ -93,7 +95,6 @@ cc_test(
     deps = [
         ":cpp_api_test",
     ],
-    timeout="long"
 )
 
 cc_test(
@@ -104,7 +105,7 @@ cc_test(
     ],
     deps = [
         ":cpp_api_test",
-    ]
+    ],
 )
 
 cc_test(
@@ -119,7 +120,7 @@ cc_test(
     ] + select({
         ":use_pre_cxx11_abi": ["@libtorch_pre_cxx11_abi//:libtorch"],
         "//conditions:default": ["@libtorch//:libtorch"],
-    })
+    }),
 )
 
 cc_test(
