@@ -351,11 +351,6 @@ cc_library(
         ":ci_rhel_x86_64_linux": glob(["lib64/libnvinfer_plugin.so"]),
         "//conditions:default": ["lib/x86_64-linux-gnu/libnvinfer_plugin.so"],
     }),
-    hdrs = select({
-        ":aarch64_linux": glob(["include/aarch64-linux-gnu/NvInferPlugin*.h"]),
-        ":windows": glob(["include/NvInferPlugin*.h"]),
-        "//conditions:default": glob(["include/x86_64-linux-gnu/NvInferPlugin*.h"]),
-    }),
     copts = [
         "-pthread",
     ],

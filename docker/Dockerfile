@@ -34,6 +34,7 @@ WORKDIR /workspace/torch_tensorrt/src
 RUN cp ./docker/WORKSPACE.docker WORKSPACE
 
 # This script builds both libtorchtrt bin/lib/include tarball and the Python wheel, in dist/
+RUN pip3 install --upgrade pip
 RUN ./docker/dist-build.sh
 
 FROM base as torch-tensorrt
@@ -45,7 +46,8 @@ RUN rm -rf /opt/pytorch/torch_tensorrt
 COPY . /workspace/torch_tensorrt
 COPY --from=torch-tensorrt-builder  /workspace/torch_tensorrt/src/py/dist/ .
 
-RUN pip3 install ipywidgets --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org
+RUN pip3 install --upgrade pip \
+  && pip3 install ipywidgets --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host=files.pythonhosted.org
 RUN jupyter nbextension enable --py widgetsnbextension
 
 RUN pip3 install *.whl && rm -fr /workspace/torch_tensorrt/py/dist/* *.whl
